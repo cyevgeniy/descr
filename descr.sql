@@ -8,6 +8,8 @@ var tt varchar2(30);
 
 exec :tt := '&1';
 
+set feedback on
+
 select a.column_name, decode(a.nullable, 'Y', '', 'N', 'NOT NULL') NULLABLE,
 a.data_type || case
 when a.data_precision is not null and nvl(a.data_scale,0)>0 then '('||a.data_precision||','||a.data_scale||')'
@@ -28,4 +30,3 @@ and a.owner = nvl((SELECT upper(substr(:tt, 1, INSTR(:tt, '.') - 1)) FROM dual),
 AND a.TABLE_NAME = (SELECT upper(substr(:tt, instr(:tt, '.') + 1)) FROM dual)
 AND b.OWNER = a.OWNER
 order by a.internal_column_id ASC;
-set feedback on
